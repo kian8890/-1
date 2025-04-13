@@ -6,6 +6,12 @@ import string
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret123'
 
+def generate_key():
+    letters = list(string.ascii_lowercase)
+    shuffled = letters[:]
+    random.shuffle(shuffled)
+    return dict(zip(letters, shuffled))
+
 def parse_key_string(key_str):
     key_map = {}
     pairs = key_str.lower().split(',')
@@ -29,20 +35,18 @@ def mono_encrypt(text, key_map):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    encrypted_text = ""
-    keymap = ""
-    plaintext = ""
+    keymap = ''
+    plaintext = ''
+    key_dict = generate_key()
+    keymap = ', '.join(f"{k}:{v}" for k, v in key_dict.items())
 
     if request.method == 'POST':
         plaintext = request.form.get('plaintext', '')
         keymap = request.form.get('keymap', '')
-        try:
-            key_dict = parse_key_string(keymap)
-            encrypted_text = mono_encrypt(plaintext, key_dict)
-        except Exception as e:
-            encrypted_text = f"⚠️ خطأ في مفتاح التشفير: {e}"
+        key_dict = parse_key_string(keymap)
+        plaintext = mono_encrypt(plaintext, key_dict)
 
-    return render_template('index.html', encrypted=encrypted_text, keymap=keymap, plaintext=plaintext)
+    return render_template('index.html', plaintext=plaintext, keymap=keymap)
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 10000))
