@@ -168,10 +168,9 @@
       </div>
 
       {% if result %}
-      <div class="output">
-        <label>🌸 Result</label>
-        <p>{{ result }}</p>
-      </div>
+      <!-- Move "Result" label above the output textarea -->
+      <label for="result">🌸 Result</label>
+      <textarea id="result" readonly>{{ result }}</textarea>
       {% endif %}
     </form>
   </div>
