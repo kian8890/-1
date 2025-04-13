@@ -1,61 +1,49 @@
 from flask import Flask, render_template, request
+import os
 import random
 import string
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'secret123'
 
-def generate_key():
-    letters = list(string.ascii_lowercase)
-    shuffled = letters[:]
-    random.shuffle(shuffled)
-    return dict(zip(letters, shuffled))
+def parse_key_string(key_str):
+    key_map = {}
+    pairs = key_str.lower().split(',')
+    for pair in pairs:
+        if ':' in pair:
+            k, v = pair.split(':')
+            key_map[k.strip()] = v.strip()
+    return key_map
 
-def encrypt(text, keymap):
-    result = ''
+def mono_encrypt(text, key_map):
+    result = ""
     for char in text:
-        if char.lower() in keymap:
-            new_char = keymap[char.lower()]
-            result += new_char.upper() if char.isupper() else new_char
+        if char.isalpha():
+            if char.islower():
+                result += key_map.get(char, char)
+            else:
+                result += key_map.get(char.lower(), char).upper()
         else:
             result += char
     return result
 
-def decrypt(text, keymap):
-    reversed_key = {v: k for k, v in keymap.items()}
-    result = ''
-    for char in text:
-        if char.lower() in reversed_key:
-            new_char = reversed_key[char.lower()]
-            result += new_char.upper() if char.isupper() else new_char
-        else:
-            result += char
-    return result
-
-@app.route("/", methods=["GET", "POST"])
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    result = ''
-    plaintext = ''
-    keymap_str = ''
-    keymap = generate_key()  # default key on load
+    encrypted_text = ""
+    keymap = ""
+    plaintext = ""
 
-    if request.method == "POST":
-        action = request.form.get("action")
-        plaintext = request.form.get("plaintext", "")
-        keymap_str = request.form.get("keymap", "")
+    if request.method == 'POST':
+        plaintext = request.form.get('plaintext', '')
+        keymap = request.form.get('keymap', '')
         try:
-            keymap = dict(item.split(":") for item in keymap_str.replace(" ", "").split(",") if ":" in item)
-        except:
-            result = "Invalid key format!"
-        else:
-            if action == "encrypt":
-                result = encrypt(plaintext, keymap)
-            elif action == "decrypt":
-                result = decrypt(plaintext, keymap)
+            key_dict = parse_key_string(keymap)
+            encrypted_text = mono_encrypt(plaintext, key_dict)
+        except Exception as e:
+            encrypted_text = f"⚠️ خطأ في مفتاح التشفير: {e}"
 
-    # Format keymap back to string
-    keymap_str = ', '.join(f'{k}:{v}' for k, v in keymap.items())
+    return render_template('index.html', encrypted=encrypted_text, keymap=keymap, plaintext=plaintext)
 
-    return render_template("index.html", plaintext=plaintext, keymap=keymap_str, result=result)
-
-if __name__ == "__main__":
-    app.run(debug=True)
+if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host='0.0.0.0', port=port)
