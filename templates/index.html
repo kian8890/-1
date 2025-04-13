@@ -115,7 +115,7 @@
       background-color: #fce4ec;
       padding: 18px;
       border-radius: 15px;
-      margin-top: 15px;
+      margin-top: 30px;
       border: 2px dashed var(--primary);
     }
 
@@ -126,10 +126,13 @@
   </style>
   <script>
     window.onload = function () {
-      const letters = "abcdefghijklmnopqrstuvwxyz".split('');
-      const shuffled = [...letters].sort(() => Math.random() - 0.5);
-      const keyPairs = letters.map((l, i) => `${l}:${shuffled[i]}`);
-      document.getElementById('keymap').value = keyPairs.join(', ');
+      const keyInput = document.getElementById('keymap');
+      if (!keyInput.value.trim()) {
+        const letters = "abcdefghijklmnopqrstuvwxyz".split('');
+        const shuffled = [...letters].sort(() => Math.random() - 0.5);
+        const keyPairs = letters.map((l, i) => `${l}:${shuffled[i]}`);
+        keyInput.value = keyPairs.join(', ');
+      }
     };
 
     function toggleKey() {
@@ -150,7 +153,7 @@
     <h1>Monoalphabetic Cipher</h1>
     <form method="POST">
       <label for="plaintext">💌 Enter Text</label>
-      <textarea name="plaintext" placeholder="Type your text...">{{ plaintext }}</textarea>
+      <textarea name="plaintext" placeholder="Type your message...">{{ plaintext }}</textarea>
 
       <label for="keymap">🔐 Key Map</label>
       <input type="password" id="keymap" name="keymap" value="{{ keymap }}" readonly />
@@ -163,14 +166,14 @@
         <button type="submit" name="action" value="encrypt">🔒 Encrypt</button>
         <button type="submit" name="action" value="decrypt">🔓 Decrypt</button>
       </div>
-    </form>
 
-    {% if result %}
-    <label style="margin-top: 25px;">🌸 Result</label>
-    <div class="output">
-      <p>{{ result }}</p>
-    </div>
-    {% endif %}
+      {% if result %}
+      <div class="output">
+        <label>🌸 Result</label>
+        <p>{{ result }}</p>
+      </div>
+      {% endif %}
+    </form>
   </div>
 </body>
 </html>
