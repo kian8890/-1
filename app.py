@@ -21,9 +21,6 @@ def parse_key_string(key_str):
             key_map[k.strip()] = v.strip()
     return key_map
 
-def invert_key_map(key_map):
-    return {v: k for k, v in key_map.items()}
-
 def mono_cipher(text, key_map):
     result = ""
     for char in text:
@@ -47,14 +44,9 @@ def index():
     if request.method == 'POST':
         plaintext = request.form.get('plaintext', '')
         keymap = request.form.get('keymap', '')
-        action = request.form.get('action')
-
         try:
             key_dict = parse_key_string(keymap)
-            if action == 'encrypt':
-                result = mono_cipher(plaintext, key_dict)
-            elif action == 'decrypt':
-                result = mono_cipher(plaintext, invert_key_map(key_dict))
+            result = mono_cipher(plaintext, key_dict)
         except Exception as e:
             result = f"⚠️ Error in key format: {e}"
 
