@@ -115,7 +115,7 @@
       background-color: #fce4ec;
       padding: 18px;
       border-radius: 15px;
-      margin-bottom: 30px;
+      margin-top: 15px;
       border: 2px dashed var(--primary);
     }
 
@@ -149,14 +149,6 @@
   <div class="card">
     <h1>Monoalphabetic Cipher</h1>
     <form method="POST">
-
-      {% if result %}
-      <div class="output">
-        <label>🌸 Result</label>
-        <p>{{ result }}</p>
-      </div>
-      {% endif %}
-
       <label for="plaintext">💌 Enter Text</label>
       <textarea name="plaintext" placeholder="Type your message...">{{ plaintext }}</textarea>
 
@@ -172,6 +164,13 @@
         <button type="submit" name="action" value="decrypt">🔓 Decrypt</button>
       </div>
     </form>
+
+    {% if result %}
+    <label style="margin-top: 25px;">🌸 Result</label>
+    <div class="output">
+      <p>{{ result }}</p>
+    </div>
+    {% endif %}
   </div>
 </body>
 </html>
