@@ -1,176 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Monoalphabetic Cipher</title>
-  <style>
-    :root {
-      --primary: #e91e63;
-      --background: #fff0f6;
-      --card: #ffffff;
-      --text: #4a004f;
-      --input-bg: #ffe0eb;
-      --button-hover: #c2185b;
-      --border: #f8bbd0;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      background-color: var(--background);
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 30px 15px;
-    }
-
-    .card {
-      background: var(--card);
-      width: 100%;
-      max-width: 600px;
-      padding: 40px;
-      border-radius: 30px;
-      box-shadow: 0 12px 30px rgba(233, 30, 99, 0.2);
-      border: 3px solid var(--border);
-    }
-
-    h1 {
-      text-align: center;
-      color: var(--primary);
-      margin-bottom: 25px;
-      font-size: 28px;
-    }
-
-    label {
-      font-weight: bold;
-      display: block;
-      margin-top: 20px;
-      margin-bottom: 8px;
-    }
-
-    textarea,
-    input {
-      width: 100%;
-      padding: 14px;
-      border-radius: 15px;
-      border: 2px solid var(--border);
-      background-color: var(--input-bg);
-      color: var(--text);
-      font-size: 16px;
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 120px;
-    }
-
-    .show-btn-container {
-      text-align: right;
-      margin-top: 5px;
-    }
-
-    .show-btn {
-      background: none;
-      border: none;
-      color: var(--primary);
-      font-size: 14px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-bottom: 10px;
-    }
-
-    .buttons {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin-top: 25px;
-      flex-wrap: wrap;
-    }
-
-    .buttons button {
-      background-color: var(--primary);
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      font-size: 16px;
-      border-radius: 25px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    .buttons button:hover {
-      background-color: var(--button-hover);
-    }
-
-    .output {
-      background-color: #fce4ec;
-      padding: 18px;
-      border-radius: 15px;
-      margin-top: 30px;
-      border: 2px dashed var(--primary);
-    }
-
-    .output p {
-      margin-top: 10px;
-      word-break: break-word;
-    }
-  </style>
-  <script>
-    window.onload = function () {
-      const letters = "abcdefghijklmnopqrstuvwxyz".split('');
-      const shuffled = [...letters].sort(() => Math.random() - 0.5);
-      const keyPairs = letters.map((l, i) => `${l}:${shuffled[i]}`);
-      document.getElementById('keymap').value = keyPairs.join(', ');
-    };
-
-    function toggleKey() {
-      const input = document.getElementById('keymap');
-      const btn = document.getElementById('toggleKeyBtn');
-      if (input.type === 'password') {
-        input.type = 'text';
-        btn.textContent = 'Hide Key';
-      } else {
-        input.type = 'password';
-        btn.textContent = 'Show Key';
-      }
-    }
-  </script>
+    <meta charset="UTF-8">
+    <title>Girly Cipher</title>
+    <style>
+        body {
+            background-color: #ffe6f0;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff0f5;
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 0 25px rgba(255, 192, 203, 0.6);
+            width: 90%;
+            max-width: 500px;
+        }
+        h1 {
+            text-align: center;
+            color: #e91e63;
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin: 10px 0 5px;
+            color: #880e4f;
+        }
+        textarea, input[type="password"], input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            background-color: #ffe4ec;
+            color: #880e4f;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        .btns {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        button {
+            background-color: #f06292;
+            color: white;
+            font-weight: bold;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background-color: #ec407a;
+        }
+        #toggleKey {
+            background-color: transparent;
+            color: #d81b60;
+            font-size: 14px;
+            padding: 0;
+            margin-top: -10px;
+            margin-bottom: 15px;
+            border: none;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .output {
+            background-color: #ffe4ec;
+            color: #880e4f;
+            padding: 12px;
+            border-radius: 12px;
+            margin-top: 20px;
+            min-height: 80px;
+            white-space: pre-wrap;
+        }
+    </style>
 </head>
 <body>
-  <div class="card">
-    <h1>Monoalphabetic Cipher</h1>
-    <form method="POST">
-      <label for="plaintext">💌 Enter Text</label>
-      <textarea name="plaintext" placeholder="Type your message...">{{ plaintext }}</textarea>
+    <div class="container">
+        <h1>Girly Cipher</h1>
+        <form method="POST">
+            <label for="plaintext">Your Text</label>
+            <textarea name="plaintext" rows="5" placeholder="Enter text...">{{ plaintext }}</textarea>
 
-      <label for="keymap">🔐 Key Map</label>
-      <input type="password" id="keymap" name="keymap" value="{{ keymap }}" readonly />
+            <label for="keymap">Encryption Key</label>
+            <input type="password" name="keymap" id="keymap" value="{{ keymap }}" readonly>
+            <button type="button" id="toggleKey">Show Key</button>
 
-      <div class="show-btn-container">
-        <button type="button" class="show-btn" id="toggleKeyBtn" onclick="toggleKey()">Show Key</button>
-      </div>
+            <div class="btns">
+                <button name="action" value="encrypt">Encrypt</button>
+                <button name="action" value="decrypt">Decrypt</button>
+            </div>
+        </form>
 
-      <div class="buttons">
-        <button type="submit" name="action" value="encrypt">🔒 Encrypt</button>
-        <button type="submit" name="action" value="decrypt">🔓 Decrypt</button>
-      </div>
-    </form>
-
-    {% if result %}
-    <div class="output">
-      <label>🌸 Result</label>
-      <p>{{ result }}</p>
+        <div class="output">
+            <label>Result</label>
+            <p>{{ result }}</p>
+        </div>
     </div>
-    {% endif %}
-  </div>
+
+    <script>
+        const toggleBtn = document.getElementById('toggleKey');
+        const keyInput = document.getElementById('keymap');
+
+        toggleBtn.addEventListener('click', () => {
+            if (keyInput.type === "password") {
+                keyInput.type = "text";
+                toggleBtn.textContent = "Hide Key";
+            } else {
+                keyInput.type = "password";
+                toggleBtn.textContent = "Show Key";
+            }
+        });
+    </script>
 </body>
 </html>
